@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FitCheck — does it fit?</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h1>FitCheck</h1>
+  <p class="tagline">Photo an area, draw a border, pick an object — see if it fits.</p>
+</header>
+
+<main>
+
+  <!-- STEP 1: PHOTO -->
+  <section class="card" id="step1">
+    <h2><span class="stepnum">1</span> Take or upload a photo</h2>
+    <div class="btnrow">
+      <button id="btnCamera" class="btn">Use camera</button>
+      <label class="btn btn-file">
+        Upload photo
+        <input type="file" id="fileInput" accept="image/*" hidden>
+      </label>
+    </div>
+    <div id="cameraBox" class="hidden">
+      <video id="camVideo" autoplay playsinline></video>
+      <div class="btnrow">
+        <button id="btnSnap" class="btn btn-primary">Snap photo</button>
+        <button id="btnCamCancel" class="btn">Cancel</button>
+      </div>
+      <p class="hint" id="camHint">Camera needs this page on <code>localhost</code> or HTTPS. If it fails, use Upload instead.</p>
+    </div>
+  </section>
+
+  <!-- STEP 2: DRAW BORDER -->
+  <section class="card locked" id="step2">
+    <h2><span class="stepnum">2</span> Draw a border around the area</h2>
+    <div class="toolbar">
+      <div class="seg">
+        <button id="modeTrace" class="seg-btn active">Trace</button>
+        <button id="modePoints" class="seg-btn">Corners</button>
+      </div>
+      <button id="btnUndo" class="btn btn-sm">Undo point</button>
+      <button id="btnClear" class="btn btn-sm">Clear</button>
+    </div>
+    <p class="hint" id="drawHint">Drag on the photo to trace the area's edge. Release to close the shape.</p>
+    <div class="canvas-wrap">
+      <canvas id="canvas"></canvas>
+    </div>
+    <p class="hint">Tip: draw around the <em>empty space</em> the object would go into (e.g. a shelf gap, not the whole shelf).</p>
+  </section>
+
+  <!-- STEP 3: SCALE -->
+  <section class="card locked" id="step3">
+    <h2><span class="stepnum">3</span> Set the real size</h2>
+    <p class="hint">Measure the real width of what you outlined (ruler / tape). Height optional — improves accuracy.</p>
+    <div class="formrow">
+      <label>Width <input type="number" id="realW" min="0.1" step="0.1" placeholder="e.g. 40"></label>
+      <label>Height <input type="number" id="realH" min="0.1" step="0.1" placeholder="optional"></label>
+      <label>Unit
+        <select id="unit">
+          <option value="cm">cm</option>
+          <option value="in">inches</option>
+        </select>
+      </label>
+      <button id="btnScale" class="btn btn-primary">Set scale</button>
+    </div>
+    <p class="hint" id="scaleInfo"></p>
+  </section>
+
+  <!-- STEP 4: OBJECT -->
+  <section class="card locked" id="step4">
+    <h2><span class="stepnum">4</span> Pick the object</h2>
+    <div class="formrow">
+      <input type="text" id="objName" list="objList" placeholder="e.g. laptop, shoebox, mug…" autocomplete="off">
+      <button id="btnMic" class="btn" title="Speak the object">&#127908;</button>
+      <button id="btnCheck" class="btn btn-primary">Does it fit?</button>
+    </div>
+    <datalist id="objList"></datalist>
+    <div id="customDims" class="formrow hidden">
+      <span class="hint">Unknown object — enter its footprint:</span>
+      <label>W <input type="number" id="custW" min="0.1" step="0.1"></label>
+      <label>D <input type="number" id="custD" min="0.1" step="0.1"></label>
+      <select id="custUnit"><option value="cm">cm</option><option value="in">in</option></select>
+    </div>
+  </section>
+
+  <!-- RESULT -->
+  <section class="card" id="resultCard">
+    <h2>Result</h2>
+    <div id="result" class="result-empty">Draw an area and check an object to see the verdict.</div>
+  </section>
+
+</main>
+
+<footer>
+  <p>Estimates only — take the photo straight-on and measure carefully for best results.</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
